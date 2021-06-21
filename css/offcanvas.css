@@ -13,6 +13,11 @@ footer {
   padding: 30px 0;
 }
 
+mark {
+  padding:0 !important;
+  background-color:yellow !important; 
+}
+
 /*
  * Off Canvas
  * --------------------------------------------------
