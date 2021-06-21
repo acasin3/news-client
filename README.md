@@ -18,3 +18,8 @@ After
 $authorization = 'Authorization: Bearer *************************';
 $cookie = 'Cookie: Authorization=*************************';
 ```
+
+## Next Steps
+1. Sanitize query string parameters.
+2. Standardize image heights.
+3. Get data via ajax.
