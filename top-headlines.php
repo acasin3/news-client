@@ -42,6 +42,16 @@ $arr_response = json_decode($response, true);
 
 if ( $http_code == 200 ) {
   $arr_articles = $arr_response['articles'];
+  // Move articles with no image to Other news
+  $news = [];
+  $other_news = [];
+  foreach ( $arr_articles as $article ) {
+    if ( $article['urlToImage'] == '' ) {
+      $other_news[] = $article;
+    } else {
+      $news[] = $article;
+    }
+  }
 } else {
   $error = $arr_response['message'];
   echo $error;
@@ -126,7 +136,7 @@ if ( $http_code == 200 ) {
 
           <div class="row">
             <?php 
-              foreach ( $arr_articles as $article ) {
+              foreach ( $news as $article ) {
                 $title = $article['title'];
                 $arr_title = explode(' - ', $title);
                 $publish_date = date('F n, Y g:i:s A', strtotime($article['publishedAt'])); 
@@ -158,6 +168,23 @@ if ( $http_code == 200 ) {
           </div><!--/row-->
 
         </div><!--/.col-xs-12.col-sm-9-->
+
+        <?php if ( count($other_news) > 0 ) { ?>
+          <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+            <div class="list-group">
+              <a href="#" class="list-group-item active">Other News</a>
+              <?php 
+                foreach ( $other_news as $article ) {
+              ?>
+                  <a href="<?php echo $article['url']; ?>" class="list-group-item">
+                    <?php echo $article['title']; ?>
+                  </a>
+              <?php 
+                }
+              ?>
+            </div>
+          </div><!--/.sidebar-offcanvas-->
+        <?php } ?>
       </div><!--/row-->
 
       <hr>
