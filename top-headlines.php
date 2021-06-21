@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors', 0); // Set to 1 in dev
 
 function highlight_in_string($haystack, $needle) {
   $i = 0;
@@ -112,8 +113,6 @@ if ( $http_code == 200 ) {
   $carousel_news_count = count($carousel_news); 
 } else {
   $error = $arr_response['message'];
-  echo $error;
-  exit;	
 }
 ?>
 
@@ -220,6 +219,15 @@ if ( $http_code == 200 ) {
     </nav><!-- /.navbar -->
 
     <div class="container">
+      <?php
+        if ( isset($error) ) {
+      ?>
+          <div class="alert alert-danger" role="alert">
+            <?php echo $error; ?>
+          </div>
+      <?php
+        }
+      ?>
       <div class="row row-offcanvas row-offcanvas-right">
         <div class="col-xs-12 col-sm-9">
 
