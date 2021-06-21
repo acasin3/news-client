@@ -1,4 +1,4 @@
-# Consume REST API Using PHP Curl Demo
+# Consume REST API Using PHP Curl
 
 https://newsapi.org
 
