@@ -1,5 +1,22 @@
 <?php
 
+function highlight_in_string($haystack, $needle) {
+  $i = 0;
+  $needle_length = strlen($needle);
+  $matches = [];
+  while ( stripos($haystack, $needle, $i) !== false ) {
+    $needlePos = stripos($haystack, $needle, $i);
+    $matches[] = substr($haystack, $needlePos, $needle_length );
+    $i = $needlePos + strlen($needle) + 1;
+  }
+  $unique_matches = array_unique($matches);
+
+  foreach ( $unique_matches as $match ) {
+    $haystack = str_replace($match, '<mark>' . $match . '</mark>', $haystack);
+  }
+  return $haystack;
+}
+
 if (!defined('API_URL')) define('API_URL', 'https://newsapi.org/v2/'); // INCLUDE TRAILING SLASH!!!!
 
 $page = basename(__FILE__);
@@ -18,10 +35,14 @@ foreach($countries as $line) {
 asort($arr_countries);
 
 $country = 'us';
+$search_keyword = '';
+
 if ( isset($_POST['submit']) ) {
   $country = trim($_POST['country']);
+  $search_keyword = trim($_POST['search_keyword']);
 } elseif ( isset($_GET['country'] )) {
   $country = trim($_GET['country']);
+  $search_keyword = isset($_GET['q']) ? trim($_GET['q']) : '';
 }
 
 $country_name = $arr_countries[$country];
@@ -32,6 +53,10 @@ $cookie = 'Cookie: Authorization=<PASTE API KEY HERE>';
 $url = API_URL . 'top-headlines';
 $method = 'GET';
 $data = compact('country');
+if ( trim($search_keyword) != '' ) {
+  $data['q'] = $search_keyword;
+}
+
 $url = sprintf("%s?%s", $url, http_build_query($data));
 $headers = array( $authorization, $cookie );
 
@@ -71,6 +96,11 @@ if ( $http_code == 200 ) {
   $news = [];
   $other_news = [];
   foreach ( $arr_articles as $article ) {
+    if ( $search_keyword != '' ) {
+      $article['title'] = highlight_in_string($article['title'], $search_keyword);
+      $article['description'] = highlight_in_string($article['description'], $search_keyword);
+      $article['content'] = highlight_in_string($article['description'], $search_keyword);
+    }
     if ( $article['urlToImage'] == '' ) {
       $other_news[] = $article;
     } else {
@@ -161,6 +191,9 @@ if ( $http_code == 200 ) {
                 <?php 
                   foreach ( $arr_countries as $k => $v ) {
                     $data = ['country'=>$k];
+                    if ( $search_keyword != '' ) {
+                      $data['q'] = $search_keyword;
+                    }
                     $url = $site_url;
                     $url = sprintf("%s?%s", $url, http_build_query($data));
                 ?>
@@ -170,6 +203,17 @@ if ( $http_code == 200 ) {
                 ?>
               </ul>
             </li>
+            <form class="navbar-form navbar-left" method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                <div class="input-group">
+                    <input type="hidden" class="form-control" name="country" value="<?php echo $country; ?>" />
+                    <input type="text" class="form-control" name="search_keyword" 
+                           value="<?php echo $search_keyword; ?>"
+                           placeholder="Search" />
+                    <span class="input-group-btn">
+                        <button type="submit" name="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+                    </span>
+                </div>
+            </form>
           </ul>
         </div><!-- /.nav-collapse -->
       </div><!-- /.container -->
