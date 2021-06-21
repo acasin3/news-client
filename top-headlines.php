@@ -2,12 +2,36 @@
 
 if (!defined('API_URL')) define('API_URL', 'https://newsapi.org/v2/'); // INCLUDE TRAILING SLASH!!!!
 
+$page = basename(__FILE__);
+$site_url = 'http://localhost/news-client/' . $page;
+
+$arr_countries = [];
+$countries = file('countries.txt');
+
+foreach($countries as $line) {
+  $arr_line = explode(',', $line);
+  $key = trim($arr_line[0]);
+  $value = trim($arr_line[1]);
+  $arr_countries[$key] = $value;
+}
+
+asort($arr_countries);
+
+$country = 'us';
+if ( isset($_POST['submit']) ) {
+  $country = trim($_POST['country']);
+} elseif ( isset($_GET['country'] )) {
+  $country = trim($_GET['country']);
+}
+
+$country_name = $arr_countries[$country];
+
 $authorization = 'Authorization: Bearer <PASTE API KEY HERE>';
 $cookie = 'Cookie: Authorization=<PASTE API KEY HERE>';
 
 $url = API_URL . 'top-headlines';
 $method = 'GET';
-$data = ['country' => 'us'];
+$data = compact('country');
 $url = sprintf("%s?%s", $url, http_build_query($data));
 $headers = array( $authorization, $cookie );
 
@@ -129,6 +153,23 @@ if ( $http_code == 200 ) {
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
+            <li class="dropdown">
+              <a  href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" 
+                  aria-haspopup="true" aria-expanded="false"><?php echo $country_name; ?><span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <?php 
+                  foreach ( $arr_countries as $k => $v ) {
+                    $data = ['country'=>$k];
+                    $url = $site_url;
+                    $url = sprintf("%s?%s", $url, http_build_query($data));
+                ?>
+                    <li><a href="<?php echo $url; ?>"><?php echo $v; ?></a></li>
+                <?php
+                  }
+                ?>
+              </ul>
+            </li>
           </ul>
         </div><!-- /.nav-collapse -->
       </div><!-- /.container -->

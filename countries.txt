@@ -1,0 +1,19 @@
+au,Australia
+be,Belgium
+br,Brazil
+ca,Canada
+ch,Switzerland
+de,Germany
+fr,France
+gb,Great Britain
+hk,Hong Kong
+it,Italy
+jp,Japan
+kr,Korea
+nz,New Zealand
+ph,Philippines
+ru,Russia
+sg,Singapore
+tw,Taiwan
+us,United States
+za,South Africa
