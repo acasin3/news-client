@@ -4,7 +4,7 @@ https://newsapi.org
 
 ## API Key
 
-Get one from [newsapi.org](https://newsapi.org/register/). Then, search and replace the `<PASTE API KEY HERE>` placeholder in **top-headlines.php**. 
+Get one from [newsapi.org](https://newsapi.org/register/). Then, search and replace the `<PASTE API KEY HERE>` placeholder in the **top-headlines.php** file. 
 
 _Before_
 ```bash
