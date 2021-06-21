@@ -25,8 +25,8 @@ curl_setopt_array(
               CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
               CURLOPT_CUSTOMREQUEST => $method,
               CURLOPT_HTTPHEADER => $headers,
-		          CURLOPT_SSL_VERIFYHOST => 2,
-              CURLOPT_SSL_VERIFYPEER => false   // set to true in prod env 
+			  CURLOPT_SSL_VERIFYHOST => 2,
+              CURLOPT_SSL_VERIFYPEER => false   // set to true in prod env
           )
 );
 
@@ -42,12 +42,147 @@ $arr_response = json_decode($response, true);
 
 if ( $http_code == 200 ) {
   $arr_articles = $arr_response['articles'];
-  echo '<pre>';
-  print_r($arr_articles);
-  echo '</pre>';
 } else {
   $error = $arr_response['message'];
   echo $error;
+  exit;	
 }
-
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+    <link rel="canonical" href="https://getbootstrap.com/docs/3.3/examples/offcanvas/">
+
+    <title>Consume API Using PHP</title>
+
+    <!-- Bootstrap core CSS -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="dist/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/offcanvas.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <style>
+      img {
+        max-width:100%;
+      }
+    </style>
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="dist/assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <nav class="navbar navbar-fixed-top navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+          <button   type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" 
+            aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">World News</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+          </ul>
+        </div><!-- /.nav-collapse -->
+      </div><!-- /.container -->
+    </nav><!-- /.navbar -->
+
+    <div class="container">
+      <div class="row row-offcanvas row-offcanvas-right">
+        <div class="col-xs-12 col-sm-9">
+
+          <div class="row">
+            <?php 
+              foreach ( $arr_articles as $article ) {
+                $title = $article['title'];
+                $arr_title = explode(' - ', $title);
+                $publish_date = date('F n, Y g:i:s A', strtotime($article['publishedAt'])); 
+            ?>
+              <div class="col-xs-12 col-lg-6">
+                <h3><?php echo $arr_title[0]; ?></h3>
+                <?php
+                  if ( isset($arr_title[1]) ) {
+                ?>
+                    <p>
+                      <?php echo $arr_title[1]; ?> <span class="pull-right"><?php echo $publish_date; ?></span>
+                    </p>
+                <?php              
+                  } else {
+                ?>
+                    <p><?php echo $publish_date; ?></p>
+                <?php
+                  }
+                ?>
+                <img class="news-img" src="<?php echo $article['urlToImage']; ?>" />
+                <p>
+                  <?php echo $article['description']; ?>
+                  <a href="<?php echo $article['url']; ?>"> Read more...</a>
+                </p>
+              </div><!--/.col-xs-6.col-lg-4-->
+            <?php 
+              }
+            ?>
+          </div><!--/row-->
+
+        </div><!--/.col-xs-12.col-sm-9-->
+      </div><!--/row-->
+
+      <hr>
+
+      <footer>
+        <p>&copy; <?php echo date('Y'); ?> Company, Inc.</p>
+      </footer>
+
+      <?php
+      /*
+        echo '<pre>';
+        print_r($arr_articles);
+        echo '</pre>';
+      */
+      ?>
+    </div><!--/.container-->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="dist/assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="dist/assets/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="dist/assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="js/offcanvas.js"></script>
+  </body>
+</html>
