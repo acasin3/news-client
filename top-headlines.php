@@ -347,7 +347,9 @@ if ( $http_code == 200 ) {
       <hr>
 
       <footer>
-        <p>&copy; <?php echo date('Y'); ?> Company, Inc.</p>
+        <div class="center">
+          <p><a href="https://newsapi.org" target="_blank">Powered by News API</a></p>
+        </div>
       </footer>
 
       <?php
