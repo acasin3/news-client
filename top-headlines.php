@@ -43,6 +43,7 @@ $arr_response = json_decode($response, true);
 if ( $http_code == 200 ) {
   $arr_articles = $arr_response['articles'];
   // Move articles with no image to Other news
+  $carousel_news = [];
   $news = [];
   $other_news = [];
   foreach ( $arr_articles as $article ) {
@@ -52,6 +53,9 @@ if ( $http_code == 200 ) {
       $news[] = $article;
     }
   }
+  $carousel_news = array_slice($news, 0, 3);
+  $news = array_slice($news, 3);
+  $carousel_news_count = count($carousel_news); 
 } else {
   $error = $arr_response['message'];
   echo $error;
@@ -133,6 +137,66 @@ if ( $http_code == 200 ) {
     <div class="container">
       <div class="row row-offcanvas row-offcanvas-right">
         <div class="col-xs-12 col-sm-9">
+
+          <?php if ( $carousel_news_count > 0 ) { ?>
+            <div id="myCarousel" class="carousel slide" data-ride="carousel">
+              <!-- Indicators -->
+              <ol class="carousel-indicators">
+                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                <?php if ( $carousel_news_count > 1 ) { ?>
+                  <li data-target="#myCarousel" data-slide-to="1"></li>
+                <?php } ?>
+                <?php if ( $carousel_news_count > 2 ) { ?>
+                  <li data-target="#myCarousel" data-slide-to="2"></li>
+                <?php } ?>
+              </ol>
+
+              <!-- Wrapper for slides -->
+              <div class="carousel-inner">
+
+                <div class="item active">
+                  <img src="<?php echo $carousel_news[0]['urlToImage']; ?>" style="width:100%;">
+                  <div class="carousel-caption">
+                    <h3><?php echo $carousel_news[0]['title']; ?></h3>
+                    <a href="<?php echo $carousel_news[0]['url']; ?>"> Read more...</a>
+                  </div>
+                </div>
+
+                <?php if ( $carousel_news_count > 1 ) { ?>
+                  <div class="item">
+                    <img src="<?php echo $carousel_news[1]['urlToImage']; ?>" style="width:100%;">
+                    <div class="carousel-caption">
+                      <h3><?php echo $carousel_news[1]['title']; ?></h3>
+                      <a href="<?php echo $carousel_news[1]['url']; ?>"> Read more...</a>
+                    </div>
+                  </div>
+                <?php } ?>
+
+                <?php if ( $carousel_news_count > 2 ) { ?>  
+                  <div class="item">
+                    <img src="<?php echo $carousel_news[2]['urlToImage']; ?>" style="width:100%;">
+                    <div class="carousel-caption">
+                      <h3><?php echo $carousel_news[2]['title']; ?></h3>
+                      <a href="<?php echo $carousel_news[2]['url']; ?>"> Read more...</a>
+                    </div>
+                  </div>
+                <?php } ?>
+
+              </div>
+
+              <!-- Left and right controls -->
+              <?php if ( $carousel_news_count > 1 ) { ?>  
+                <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                  <span class="glyphicon glyphicon-chevron-left"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                  <span class="glyphicon glyphicon-chevron-right"></span>
+                  <span class="sr-only">Next</span>
+                </a>
+              <?php } ?>
+            </div>
+          <?php } ?>
 
           <div class="row">
             <?php 
