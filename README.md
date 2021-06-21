@@ -15,6 +15,6 @@ $cookie = 'Cookie: Authorization=<PASTE API KEY HERE>';
 _After_
 ```bash
 After
-$authorization = 'Authorization: Bearer 1a2b3c4de5f6...';
-$cookie = 'Cookie: Authorization=1a2b3c4de5f6...';
+$authorization = 'Authorization: Bearer *************************';
+$cookie = 'Cookie: Authorization=*************************';
 ```
