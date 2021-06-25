@@ -1,6 +1,6 @@
 # Consume REST API Using PHP Curl
 
-For simple projects, there is no need to use a framework to consume REST API's.  For this project, the <a href="https://newsapi.org/docs/endpoints/top-headlines">top-headlines</a>  endpoint of the https://newsapi.org API will be used.
+For simple projects, there is no need to use a framework to consume REST API's.  For this project, the <a href="https://newsapi.org/docs/endpoints/top-headlines" target="_blank">top-headlines</a>  endpoint of the https://newsapi.org API will be used.
 
 ## Pre-requisites
 
