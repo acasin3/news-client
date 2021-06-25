@@ -5,7 +5,7 @@ For simple projects, there is no need to use a framework to consume REST API's. 
 ## Pre-requisites
 
 1. Enable curl. See [https://www.php.net/manual/en/curl.setup.php](https://www.php.net/manual/en/curl.setup.php)
-2. Get an API key from [newsapi.org](https://newsapi.org/register/) and paste in the Php script placeholder. 
+2. Get an API key from [newsapi.org](https://newsapi.org/register/) and paste in the placeholder of the **top-headlines.php** file. 
 
    _Before_
    ```bash
@@ -21,7 +21,7 @@ For simple projects, there is no need to use a framework to consume REST API's. 
 
 ## Implementation
 
-To see the various stages of the implementation, see the details of each commit in the [commit history](https://github.com/acasin3/news-client/commits/main/top-headlines.php) of the top-headlines.php file.
+To see the various stages of the implementation, see the details of each commit in the [commit history](https://github.com/acasin3/news-client/commits/main/top-headlines.php) of the **top-headlines.php** file.
 
 ![image](https://user-images.githubusercontent.com/59311849/123371167-c8d1ff80-d5b3-11eb-9442-408dab3a8abc.png)
 
