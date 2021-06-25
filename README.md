@@ -1,6 +1,6 @@
 # Consume REST API Using PHP Curl
 
-https://newsapi.org
+For simple projects, there is no need to use a framework to consume REST API's.  For this project, the API of https://newsapi.org will be used.
 
 ## Pre-requisites
 
@@ -18,6 +18,12 @@ https://newsapi.org
    $authorization = 'Authorization: Bearer *************************';
    $cookie = 'Cookie: Authorization=*************************';
    ```
+
+## Implementation
+
+To see the various stages of the implementation, see the details of each commit in the [commit history](https://github.com/acasin3/news-client/commits/main/top-headlines.php) of the top-headlines.php file.
+
+![image](https://user-images.githubusercontent.com/59311849/123371167-c8d1ff80-d5b3-11eb-9442-408dab3a8abc.png)
 
 ## Next Steps
 1. Sanitize query string parameters.
