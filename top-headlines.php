@@ -1,6 +1,42 @@
 <?php
 ini_set('display_errors', 0); // Set to 1 in dev
 
+
+function sanitize($value) {
+	if ( !is_array($value) ) {
+		// ignore if null. Nulls will be converted to empty string if not ignored.
+		if ( is_null($value) ) {
+			return $value;
+		}
+
+		// ignore if boolean. Booleans will be converted to empty string if not ignored.
+		if ( is_bool($value) ) {
+			return $value;
+		}
+		
+		// trim leading and trailing spaces
+		$value = trim($value);
+
+		// If $value consists of several words, remove double spaces between words.
+		while ( strpos($value, '  ') !== false ) {
+			$value = str_replace('  ', ' ', $value);
+		}
+		return htmlspecialchars($value);
+	} elseif ( is_assoc($value) ) {
+		// Sanitize each element
+		foreach ( $value as $k => $v ) {
+			$value[$k] = sanitize($v);
+		}
+		return $value;
+	} else {
+		// Sanitize each element
+		for ( $i = 0; $i < count($value); $i++ ) {
+			$value[$i] = sanitize($value[$i]);
+		}
+		return $value;
+	}
+}
+
 function highlight_in_string($haystack, $needle) {
   $i = 0;
   $needle_length = strlen($needle);
@@ -39,11 +75,11 @@ $country = 'us';
 $search_keyword = '';
 
 if ( isset($_POST['submit']) ) {
-  $country = trim($_POST['country']);
-  $search_keyword = trim($_POST['search_keyword']);
+  $country = sanitize($_POST['country']);
+  $search_keyword = sanitize($_POST['search_keyword']);
 } elseif ( isset($_GET['country'] )) {
-  $country = trim($_GET['country']);
-  $search_keyword = isset($_GET['q']) ? trim($_GET['q']) : '';
+  $country = sanitize($_GET['country']);
+  $search_keyword = isset($_GET['q']) ? sanitize($_GET['q']) : '';
 }
 
 $country_name = $arr_countries[$country];
@@ -54,7 +90,7 @@ $cookie = 'Cookie: Authorization=<PASTE API KEY HERE>';
 $url = API_URL . 'top-headlines';
 $method = 'GET';
 $data = compact('country');
-if ( trim($search_keyword) != '' ) {
+if ( $search_keyword != '' ) {
   $data['q'] = $search_keyword;
 }
 
