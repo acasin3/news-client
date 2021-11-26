@@ -1,7 +1,15 @@
 <?php
 ini_set('display_errors', 0); // Set to 1 in dev
 
+/* =========================================================================================
+   Constants
+   ========================================================================================= */
+if (!defined('API_URL')) define('API_URL', 'https://newsapi.org/v2/'); // INCLUDE TRAILING SLASH!!!!
+if (!defined('SITE_URL')) define('SITE_URL', 'http://localhost/news-client/'); // INCLUDE TRAILING SLASH!!!!
 
+/* =========================================================================================
+   Functions
+   ========================================================================================= */
 function sanitize($value) {
 	if ( !is_array($value) ) {
 		// ignore if null. Nulls will be converted to empty string if not ignored.
@@ -54,11 +62,11 @@ function highlight_in_string($haystack, $needle) {
   return $haystack;
 }
 
-if (!defined('API_URL')) define('API_URL', 'https://newsapi.org/v2/'); // INCLUDE TRAILING SLASH!!!!
 
 $page = basename(__FILE__);
-$site_url = 'http://localhost/news-client/' . $page;
+$site_url = SITE_URL . $page;
 
+// Countries array for dropdown
 $arr_countries = [];
 $countries = file('countries.txt');
 
@@ -71,13 +79,16 @@ foreach($countries as $line) {
 
 asort($arr_countries);
 
+// Default values
 $country = 'us';
 $search_keyword = '';
 
 if ( isset($_POST['submit']) ) {
+  // User is doing a search
   $country = sanitize($_POST['country']);
   $search_keyword = sanitize($_POST['search_keyword']);
 } elseif ( isset($_GET['country'] )) {
+  // User wants to view the top headlines of the selected country
   $country = sanitize($_GET['country']);
   $search_keyword = isset($_GET['q']) ? sanitize($_GET['q']) : '';
 }
@@ -134,16 +145,20 @@ if ( $http_code == 200 ) {
   $other_news = [];
   foreach ( $arr_articles as $article ) {
     if ( $search_keyword != '' ) {
+	  // highlight search keyword
       $article['title'] = highlight_in_string($article['title'], $search_keyword);
       $article['description'] = highlight_in_string($article['description'], $search_keyword);
       $article['content'] = highlight_in_string($article['description'], $search_keyword);
     }
+
     if ( $article['urlToImage'] == '' ) {
       $other_news[] = $article;
     } else {
       $news[] = $article;
     }
   }
+	
+  // Show the first 3 news articles in a carousel
   $carousel_news = array_slice($news, 0, 3);
   $news = array_slice($news, 3);
   $carousel_news_count = count($carousel_news); 
