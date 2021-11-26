@@ -25,6 +25,10 @@ To see the various stages of the implementation, see the details of each commit 
 
 ![image](https://user-images.githubusercontent.com/59311849/123371167-c8d1ff80-d5b3-11eb-9442-408dab3a8abc.png)
 
+## Screeshot
+
+![landing_page](https://user-images.githubusercontent.com/59311849/143609152-cc9315e6-dd5c-4068-9e76-a074cfd1e42f.PNG)
+
 ## Next Steps
 1. Standardize image heights.
 2. Get data via ajax.
