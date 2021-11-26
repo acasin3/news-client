@@ -26,6 +26,5 @@ To see the various stages of the implementation, see the details of each commit 
 ![image](https://user-images.githubusercontent.com/59311849/123371167-c8d1ff80-d5b3-11eb-9442-408dab3a8abc.png)
 
 ## Next Steps
-1. Sanitize query string parameters.
-2. Standardize image heights.
-3. Get data via ajax.
+1. Standardize image heights.
+2. Get data via ajax.
