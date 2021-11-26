@@ -1,6 +1,8 @@
 <?php
 ini_set('display_errors', 0); // Set to 1 in dev
 
+require_once 'RestClient.php';
+
 /* =========================================================================================
    Constants
    ========================================================================================= */
@@ -108,62 +110,43 @@ if ( $search_keyword != '' ) {
 $url = sprintf("%s?%s", $url, http_build_query($data));
 $headers = array( $authorization, $cookie );
 
-$curl = curl_init();
+try {
+	$http_protocol =  substr(SITE_URL, 0, 4);
+	$rest_client = new \CubesSoft\RestHelper\RestClient($http_protocol); // default protocol is https
+	$api_response  = $rest_client->get($url, $headers);
+	$arr_response = json_decode($api_response, true);
 
-curl_setopt_array(
-          $curl, 
-          array(
-              CURLOPT_URL => $url,
-              CURLOPT_RETURNTRANSFER => true,
-              CURLOPT_ENCODING => '',
-              CURLOPT_MAXREDIRS => 10,
-              CURLOPT_TIMEOUT => 0,
-              CURLOPT_FOLLOWLOCATION => true,
-              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-              CURLOPT_CUSTOMREQUEST => $method,
-              CURLOPT_HTTPHEADER => $headers,
-			  CURLOPT_SSL_VERIFYHOST => 2,
-              CURLOPT_SSL_VERIFYPEER => false   // set to true in prod env
-          )
-);
+	if ( $arr_response['status'] == 'ok' ) {
+		$arr_articles = $arr_response['articles'];
 
-$response = curl_exec($curl);
+		// Move articles with no image to Other news
+		$carousel_news = [];
+		$news = [];
+		$other_news = [];
+		foreach ( $arr_articles as $article ) {
+			if ( $search_keyword != '' ) {
+				// highlight search keyword
+				$article['title'] = highlight_in_string($article['title'], $search_keyword);
+				$article['description'] = highlight_in_string($article['description'], $search_keyword);
+				$article['content'] = highlight_in_string($article['description'], $search_keyword);
+			}
 
-if ( !curl_errno($curl) ) {
-  $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-}
+			if ( $article['urlToImage'] == '' ) {
+				$other_news[] = $article;
+			} else {
+				$news[] = $article;
+			}
+		}
 
-curl_close($curl);
-
-$arr_response = json_decode($response, true);
-
-if ( $http_code == 200 ) {
-  $arr_articles = $arr_response['articles'];
-  // Move articles with no image to Other news
-  $carousel_news = [];
-  $news = [];
-  $other_news = [];
-  foreach ( $arr_articles as $article ) {
-    if ( $search_keyword != '' ) {
-	  // highlight search keyword
-      $article['title'] = highlight_in_string($article['title'], $search_keyword);
-      $article['description'] = highlight_in_string($article['description'], $search_keyword);
-      $article['content'] = highlight_in_string($article['description'], $search_keyword);
-    }
-
-    if ( $article['urlToImage'] == '' ) {
-      $other_news[] = $article;
-    } else {
-      $news[] = $article;
-    }
-  }
-	
-  // Show the first 3 news articles in a carousel
-  $carousel_news = array_slice($news, 0, 3);
-  $news = array_slice($news, 3);
-  $carousel_news_count = count($carousel_news); 
-} else {
-  $error = $arr_response['message'];
+		// Show the first 3 news articles in a carousel
+		$carousel_news = array_slice($news, 0, 3);
+		$news = array_slice($news, 3);
+		$carousel_news_count = count($carousel_news); 
+	} else {
+		$error = $arr_response['message'];
+	}
+} catch ( \Exception $e ) {
+	$error = $e->getMessage();
 }
 ?>
 
