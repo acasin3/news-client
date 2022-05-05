@@ -1,6 +1,6 @@
 # Consume REST API
 
-For simple projects, there is no need to use a framework to consume REST API's.  For this project, the [top-headlines](https://newsapi.org/docs/endpoints/top-headlines) endpoint of the https://newsapi.org API will be used.
+For simple projects, there is no need to use a framework to consume REST APIs.  For this project, the [top-headlines](https://newsapi.org/docs/endpoints/top-headlines) endpoint of the https://newsapi.org API will be used.
 
 Initially, API calls will be made using CURL. The code will then be refactored to add a wrapper around CURL.
 
