@@ -91,7 +91,8 @@ class RestClient {
 								CURLOPT_FOLLOWLOCATION => true,
 								CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 								CURLOPT_CUSTOMREQUEST => $method,
-								CURLOPT_TIMEOUT => 300
+								CURLOPT_TIMEOUT => 300,
+								CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 GTB5'
 							)
 						);
 
