@@ -33,6 +33,13 @@ To see the various stages of the implementation, see the details of each commit 
 
 ![landing_page](https://user-images.githubusercontent.com/59311849/143609152-cc9315e6-dd5c-4068-9e76-a074cfd1e42f.PNG)
 
+
+## Breaking API Change
+> [!CAUTION]
+> The API has been updated and the only valid country option is US. From the [documentation](https://newsapi.org/docs/endpoints/top-headlines),
+
+![image](https://github.com/user-attachments/assets/050df190-fd1a-4ed6-ab20-beea46b7c3c4)
+
 ## Next Steps
 1. Standardize image heights.
 2. Get data via ajax.
